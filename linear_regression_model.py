@@ -40,10 +40,8 @@ def exploratory_data_analysis (data, string_col):
             
     """
     data_columns = data.columns
-    df_col = pd.DataFrame(data_columns, index = data_columns)
     for col in data_columns:
-        #for col in range(len(data_columns)):
-            #print(data_columns[col])
+        print("Column ", col)
         print(data[col].unique()[:5])
         print(data[col].nunique())
 
@@ -80,7 +78,7 @@ def split_train_val_test(data):
     x_train = data.iloc[idx[:n_train]]
     x_val = data.iloc[idx[n_train:n_train+n_val]]
     x_test = data.iloc[idx[n_train+n_val:]]
- 
+
     x_train = x_train.reset_index(drop=True)
     x_val = x_val.reset_index(drop=True)
     x_test = x_test.reset_index(drop=True)
@@ -121,7 +119,7 @@ def main():
     data, string_col = data_preparation(args.file_name)
     
     plt = exploratory_data_analysis (data, string_col)
-   
+
     x_train, x_val, x_test, y_train, y_val, y_test = split_train_val_test(data)
     print(len(x_train))
     print(len(x_test))
