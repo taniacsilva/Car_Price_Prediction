@@ -61,10 +61,10 @@ def exploratory_data_analysis (data, string_col):
     return plt.show()
 
 
-def split_train_val_test(data):
+def split_train_val_test(data, val_s, test_s):
     n = len(data)
-    n_val = int(n*0.2)
-    n_test = int(n*0.2)
+    n_val = int(n*val_s)
+    n_test = int(n*test_s)
     n_train = n - n_val - n_test
 
     # Creating the dataframes
@@ -94,6 +94,21 @@ def split_train_val_test(data):
     return x_train, x_val, x_test, y_train, y_val, y_test
 
 
+def linear_regression_model (x_train, y_train):
+    ones = np.ones(x_train.shape[0])
+    x_train = np.column_stack([ones, x_train])
+
+    XTX = x_train.T.dot(x_train)
+    XTX_inv = np.linalg.inv(XTX)
+    w_full = XTX_inv.dot(x_train.T).dot(y_train)
+
+    w0 = w_full[0]
+    w = w_full[1:]
+    
+    return w0, w     
+
+
+
 def parse_arguments():
     """This function parses the argument(s) of this model
 
@@ -104,9 +119,10 @@ def parse_arguments():
             args: Stores the extracted data from the parser run
     """
 
-    parser = argparse.ArgumentParser(description='Process all the arguments for this model')
-    parser.add_argument('file_name', help='The csv file name')
-
+    parser = argparse.ArgumentParser(description="Process all the arguments for this model")
+    parser.add_argument("file_name", help="The csv file name")
+    parser.add_argument("test_s", help="The size of the test set, in percentage",type=float)
+    parser.add_argument("val_s", help="The size of the validation set, in percentage",type=float)
     args = parser.parse_args()
 
     return args
@@ -120,9 +136,15 @@ def main():
     
     plt = exploratory_data_analysis (data, string_col)
 
-    x_train, x_val, x_test, y_train, y_val, y_test = split_train_val_test(data)
-    print(len(x_train))
-    print(len(x_test))
-    print(len(x_val))
+    x_train, x_val, x_test, y_train, y_val, y_test = split_train_val_test(data, args.test_s, args.val_s)
+
+    base=['engine_hp', 'engine_cylinders', 'highway_mpg', 'city_mpg', 'popularity']
+    x_train_base = x_train[base].fillna(0).values # Missing Values filled with 0
+
+    w0, w = linear_regression_model (x_train_base, y_train)
+
+    y_pred = w0 + x_train_base.dot(w)
+
+    print(y_pred)
 if __name__ == '__main__':
     main()
