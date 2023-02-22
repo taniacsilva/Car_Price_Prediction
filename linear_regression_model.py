@@ -62,6 +62,21 @@ def exploratory_data_analysis (data, string_col):
 
 
 def split_train_val_test(data, val_s, test_s):
+    """ This function splits our dataset into train, validation and test sets
+        
+        Args: 
+            data (pandas.DataFrame): The pandas Dataframe
+            val_s (float): The size of the validation set defined by the user
+            test_s (float): The size of the test set defined by the user 
+
+        Return: 
+            x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
+            x_val (pandas.DataFrame): Dataframe that includes the explanatory variables for the validation set
+            x_test (pandas.DataFrame): Dataframe that includes the explanatory variables for the test set
+            y_train (pandas.DataFrame): Dataframe that includes the objective variable for the train set
+            y_val (pandas.DataFrame): Dataframe that includes the objective variable for the validation set
+            y_test (pandas.DataFrame): Dataframe that includes the objective variable for the test set
+    """
     n = len(data)
     n_val = int(n*val_s)
     n_test = int(n*test_s)
@@ -95,6 +110,16 @@ def split_train_val_test(data, val_s, test_s):
 
 
 def linear_regression_model (x_train, y_train):
+    """ This function trains the model
+            
+            Args: 
+                x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
+                y_train (pandas.DataFrame): Dataframe that includes the objective variable for the train set
+            
+            Return:
+                w0 (float): constant obtained by training the linear regression model
+                w (numpy array): array that contains the linear regression coefficients
+    """    
     ones = np.ones(x_train.shape[0])
     x_train = np.column_stack([ones, x_train])
 
@@ -107,12 +132,28 @@ def linear_regression_model (x_train, y_train):
 
     return w0, w     
 
+def prepare_x(df, base):
+    df_num = df[base] 
+    df_num = df_num.fillna(0) # Missing Values filled with 0
+    x_train_base = df_num.values
 
-def base_plot (y_pred, y_train):
+    return x_train_base
+
+
+def results_comparison_plot (y_pred, y_train):
     sns.histplot(y_pred, color='red', alpha=0.5, bins=50)
     sns.histplot(y_train, color='blue', alpha=0.5, bins=50)
 
     return plt.show()
+
+
+def rmse(y, y_pred):
+    error = y - y_pred
+    se = error ** 2
+    mse= se.mean()
+    rmse = np.sqrt(mse)
+
+    return rmse
 
 
 def parse_arguments():
@@ -148,14 +189,21 @@ def main():
     
     print('Columns Used: ', base)
 
-    x_train_base = x_train[base].fillna(0).values # Missing Values filled with 0
+    x_train_base = prepare_x(x_train, base)
 
     w0, w = linear_regression_model (x_train_base, y_train)
 
-    y_pred = w0 + x_train_base.dot(w)
+    y_pred_train = w0 + x_train_base.dot(w)
 
-    plt = base_plot (y_pred, y_train)
-    
-    print(y_pred)
+    plt = results_comparison_plot  (y_pred_train, y_train)
+
+    print ('rmse y_pred_train : ', rmse(y_train, y_pred_train))
+
+    x_val_base = prepare_x(x_val, base)
+
+    y_pred_val = w0 + x_val_base.dot(w)   
+
+    print ('rmse y_pred_val : ', rmse(y_val, y_pred_val))
+
 if __name__ == '__main__':
     main()
