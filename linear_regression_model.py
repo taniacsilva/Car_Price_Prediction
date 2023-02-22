@@ -104,9 +104,15 @@ def linear_regression_model (x_train, y_train):
 
     w0 = w_full[0]
     w = w_full[1:]
-    
+
     return w0, w     
 
+
+def base_plot (y_pred, y_train):
+    sns.histplot(y_pred, color='red', alpha=0.5, bins=50)
+    sns.histplot(y_train, color='blue', alpha=0.5, bins=50)
+
+    return plt.show()
 
 
 def parse_arguments():
@@ -137,14 +143,19 @@ def main():
     plt = exploratory_data_analysis (data, string_col)
 
     x_train, x_val, x_test, y_train, y_val, y_test = split_train_val_test(data, args.test_s, args.val_s)
-
+ 
     base=['engine_hp', 'engine_cylinders', 'highway_mpg', 'city_mpg', 'popularity']
+    
+    print('Columns Used: ', base)
+
     x_train_base = x_train[base].fillna(0).values # Missing Values filled with 0
 
     w0, w = linear_regression_model (x_train_base, y_train)
 
     y_pred = w0 + x_train_base.dot(w)
 
+    plt = base_plot (y_pred, y_train)
+    
     print(y_pred)
 if __name__ == '__main__':
     main()
