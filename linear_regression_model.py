@@ -183,6 +183,123 @@ def rmse(y, y_pred):
     return rmse
 
 
+def prepare_x_feature_age(df, base):
+    """ This function select the columns to be filled by 0 in case of existent missing values
+    
+        Args:
+            df (pandas.DataFrame): Dataframe that have the columns that will be subject to this filling 
+            base (list): List that contains the columns that will be selected
+        
+        Return:
+            x_train_base (numpy array): Array that contains df values for the columns selected in base 
+                                        with no missing values
+    """
+    df=df.copy()
+    df['age'] = 2017 - df.year
+    features = base + ['age']
+    df_num = df[features] 
+    df_num = df_num.fillna(0) # Missing Values filled with 0
+    x_train_base_feature = df_num.values
+
+    return x_train_base_feature
+
+
+def prepare_x_doors(df, base):
+    """ This function select the columns to be filled by 0 in case of existent missing values
+    
+        Args:
+            df (pandas.DataFrame): Dataframe that have the columns that will be subject to this filling 
+            base (list): List that contains the columns that will be selected
+        
+        Return:
+            x_train_base (numpy array): Array that contains df values for the columns selected in base 
+                                        with no missing values
+    """
+    df=df.copy()
+    features=base.copy()
+    df['age'] = 2017 - df.year
+    features.append('age')
+
+    for v in [2,3,4]:
+        df[f'num_doors_{v}'] = (df.number_of_doors == v).astype('int')
+        features.append(f'num_doors_{v}')
+
+    df_num = df[features] 
+    df_num = df_num.fillna(0) # Missing Values filled with 0
+    x_train_base_feature = df_num.values
+
+    return x_train_base_feature
+
+def prepare_x_make(df, base):
+    """ This function select the columns to be filled by 0 in case of existent missing values
+    
+        Args:
+            df (pandas.DataFrame): Dataframe that have the columns that will be subject to this filling 
+            base (list): List that contains the columns that will be selected
+        
+        Return:
+            x_train_base (numpy array): Array that contains df values for the columns selected in base 
+                                        with no missing values
+    """
+    df=df.copy()
+    features=base.copy()
+    df['age'] = 2017 - df.year
+    features.append('age')
+
+    for v in [2,3,4]:
+        df[f'num_doors_{v}'] = (df.number_of_doors == v).astype('int')
+        features.append(f'num_doors_{v}')
+
+    makes = list(df.make.value_counts().head().index)
+    for v in makes:
+        df[f'make_{v}'] = (df.make == v).astype('int')
+        features.append(f'make_{v}')
+
+    df_num = df[features] 
+    df_num = df_num.fillna(0) # Missing Values filled with 0
+    x_train_base_feature = df_num.values
+
+    return x_train_base_feature
+
+
+def prepare_x_categorical_variables(df, base):
+    """ This function select the columns to be filled by 0 in case of existent missing values
+
+        Args:
+            df (pandas.DataFrame): Dataframe that have the columns that will be subject to this filling 
+            base (list): List that contains the columns that will be selected
+        
+        Return:
+            x_train_base (numpy array): Array that contains df values for the columns selected in base 
+                                        with no missing values
+    """
+    df=df.copy()
+    features=base.copy()
+    df['age'] = 2017 - df.year
+    features.append('age')
+
+    for v in [2,3,4]:
+        df[f'num_doors_{v}'] = (df.number_of_doors == v).astype('int')
+        features.append(f'num_doors_{v}')
+
+    categorical_variables = ['make', 'engine_fuel_type', 'transmission_type', 'driven_wheels', 'market_category', 'vehicle_size', 'vehicle_style']
+    categories = {}
+    for c in categorical_variables:
+        categories[c] = list (df[c].value_counts().head().index)
+
+    for c, values in categories.items():
+        for v in values:
+            df[f'{c}_{v}'] = (df[c] == v).astype('int')
+            features.append(f'{c}_{v}')
+
+        
+
+    df_num = df[features] 
+    df_num = df_num.fillna(0) # Missing Values filled with 0
+    x_train_base_feature = df_num.values
+
+    return x_train_base_feature
+
 def parse_arguments():
     """This function parses the argument(s) of this model
 
@@ -232,6 +349,37 @@ def main():
     
     print ('rmse y_pred_val : ', rmse(y_val, y_pred_val))
 
+    
+    # Considering the 'age' as a feature
+    
+    x_train_base_feature = prepare_x_feature_age(x_train, base)
+    w0, w = linear_regression_model (x_train_base_feature, y_train)
+    x_val_base = prepare_x_feature_age(x_val, base)
+    y_pred_val = w0 + x_val_base.dot(w)   
+    print ('rmse y_pred_val_age : ', rmse(y_val, y_pred_val))
+    plt = results_comparison_plot  (y_pred_val, y_val)
+
+    # Considering the 'num_doors' as a feature (categorical)
+
+    x_train_base_feature = prepare_x_doors (x_train, base)
+    w0, w = linear_regression_model (x_train_base_feature, y_train)
+    x_val_base = prepare_x_doors(x_val, base)
+    y_pred_val = w0 + x_val_base.dot(w)   
+    print ('rmse y_pred_val_doors : ', rmse(y_val, y_pred_val))
+
+    # Considering the 'make' as a feature (categorical)
+    x_train_base_feature = prepare_x_make (x_train, base)
+    w0, w = linear_regression_model (x_train_base_feature, y_train)
+    x_val_base = prepare_x_make(x_val, base)
+    y_pred_val = w0 + x_val_base.dot(w)   
+    print ('rmse y_pred_val_doors : ', rmse(y_val, y_pred_val))
+
+    # Considering all categorical variables (top5) as a feature (categorical)
+    x_train_base_feature = prepare_x_categorical_variables (x_train, base)
+    w0, w = linear_regression_model (x_train_base_feature, y_train)
+    x_val_base = prepare_x_categorical_variables (x_val, base)
+    y_pred_val = w0 + x_val_base.dot(w)   
+    print ('rmse y_pred_val_categorical_variables : ', rmse(y_val, y_pred_val))
 
 if __name__ == '__main__':
     main()
