@@ -73,9 +73,9 @@ def split_train_val_test(data, val_s, test_s):
             x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
             x_val (pandas.DataFrame): Dataframe that includes the explanatory variables for the validation set
             x_test (pandas.DataFrame): Dataframe that includes the explanatory variables for the test set
-            y_train (pandas.DataFrame): Dataframe that includes the objective variable for the train set
-            y_val (pandas.DataFrame): Dataframe that includes the objective variable for the validation set
-            y_test (pandas.DataFrame): Dataframe that includes the objective variable for the test set
+            y_train (numpy array): Array that includes the objective variable for the train set
+            y_val (numpy array): Array that includes the objective variable for the validation set
+            y_test (numpy array): Array that includes the objective variable for the test set
     """
     n = len(data)
     n_val = int(n*val_s)
@@ -114,7 +114,7 @@ def linear_regression_model (x_train, y_train):
             
             Args: 
                 x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
-                y_train (pandas.DataFrame): Dataframe that includes the objective variable for the train set
+                y_train (numpy array): Array that includes the objective variable for the train set
             
             Return:
                 w0 (float): constant obtained by training the linear regression model
@@ -133,6 +133,16 @@ def linear_regression_model (x_train, y_train):
     return w0, w     
 
 def prepare_x(df, base):
+    """ This function select the columns to be filled by 0 in case of existent missing values
+    
+        Args:
+            df (pandas.DataFrame): Dataframe that have the columns that will be subject to this filling 
+            base (list): List that contains the columns that will be selected
+        
+        Return:
+            x_train_base (numpy array): Array that contains df values for the columns selected in base 
+                                        with no missing values
+    """
     df_num = df[base] 
     df_num = df_num.fillna(0) # Missing Values filled with 0
     x_train_base = df_num.values
@@ -141,6 +151,14 @@ def prepare_x(df, base):
 
 
 def results_comparison_plot (y_pred, y_train):
+    """ This function plots predictions and actual values and allows the comparison
+
+            Args:
+                y_test (numpy array): Array that includes the predictions for the train set
+                y_train (numpy array): Array that includes the actual values for the train set
+            
+            Return:
+    """
     sns.histplot(y_pred, color='red', alpha=0.5, bins=50)
     sns.histplot(y_train, color='blue', alpha=0.5, bins=50)
 
@@ -148,6 +166,15 @@ def results_comparison_plot (y_pred, y_train):
 
 
 def rmse(y, y_pred):
+    """ This function computes the root mean square error between the predictions and the actuals 
+
+        Args:
+            y (numpy array): Array that includes the actuals
+            y_pred (numpy array): Array that includes the predictions
+    
+        Return:
+            rmse (float): float that represents the calculated root mean square error
+    """
     error = y - y_pred
     se = error ** 2
     mse= se.mean()
@@ -184,9 +211,9 @@ def main():
     plt = exploratory_data_analysis (data, string_col)
 
     x_train, x_val, x_test, y_train, y_val, y_test = split_train_val_test(data, args.test_s, args.val_s)
- 
+
     base=['engine_hp', 'engine_cylinders', 'highway_mpg', 'city_mpg', 'popularity']
-    
+
     print('Columns Used: ', base)
 
     x_train_base = prepare_x(x_train, base)
@@ -202,8 +229,9 @@ def main():
     x_val_base = prepare_x(x_val, base)
 
     y_pred_val = w0 + x_val_base.dot(w)   
-
+    
     print ('rmse y_pred_val : ', rmse(y_val, y_pred_val))
+
 
 if __name__ == '__main__':
     main()
