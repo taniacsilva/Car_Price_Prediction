@@ -300,6 +300,30 @@ def prepare_x_categorical_variables(df, base):
 
     return x_train_base_feature
 
+def linear_regression_model_reg (x_train, y_train, r):
+    """ This function trains the model using a regularization parameter to deal with correlated explanatory variables
+            
+            Args: 
+                x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
+                y_train (numpy array): Array that includes the objective variable for the train set
+            
+            Return:
+                w0 (float): constant obtained by training the linear regression model
+                w (numpy array): array that contains the linear regression coefficients
+    """    
+    ones = np.ones(x_train.shape[0])
+    x_train = np.column_stack([ones, x_train])
+
+    XTX = x_train.T.dot(x_train)
+    XTX =  XTX + r * np.eye(XTX.shape[0])
+    XTX_inv = np.linalg.inv(XTX)
+    w_full = XTX_inv.dot(x_train.T).dot(y_train)
+
+    w0 = w_full[0]
+    w = w_full[1:]
+
+    return w0, w  
+
 def parse_arguments():
     """This function parses the argument(s) of this model
 
@@ -314,6 +338,7 @@ def parse_arguments():
     parser.add_argument("file_name", help="The csv file name")
     parser.add_argument("test_s", help="The size of the test set, in percentage",type=float)
     parser.add_argument("val_s", help="The size of the validation set, in percentage",type=float)
+    parser.add_argument("r", help="parameter used for regularization", type=float)
     args = parser.parse_args()
 
     return args
@@ -380,6 +405,14 @@ def main():
     x_val_base = prepare_x_categorical_variables (x_val, base)
     y_pred_val = w0 + x_val_base.dot(w)   
     print ('rmse y_pred_val_categorical_variables : ', rmse(y_val, y_pred_val))
+
+    # Considering all categorical variables (top5) as a feature (categorical) and using regularization technique:
+    x_train_base_feature = prepare_x_categorical_variables (x_train, base)
+    w0, w = linear_regression_model_reg (x_train_base_feature, y_train, args.r)
+    x_val_base = prepare_x_categorical_variables (x_val, base)
+    y_pred_val = w0 + x_val_base.dot(w)   
+    print ('rmse y_pred_val_categorical_variables : ', rmse(y_val, y_pred_val))
+    
 
 if __name__ == '__main__':
     main()
