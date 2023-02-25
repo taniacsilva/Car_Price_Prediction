@@ -338,7 +338,7 @@ def parse_arguments():
     parser.add_argument("file_name", help="The csv file name")
     parser.add_argument("test_s", help="The size of the test set, in percentage",type=float)
     parser.add_argument("val_s", help="The size of the validation set, in percentage",type=float)
-    parser.add_argument("r", help="parameter used for regularization", type=float)
+    #parser.add_argument("r", help="parameter used for regularization", type=float)
     args = parser.parse_args()
 
     return args
@@ -407,11 +407,26 @@ def main():
     print ('rmse y_pred_val_categorical_variables : ', rmse(y_val, y_pred_val))
 
     # Considering all categorical variables (top5) as a feature (categorical) and using regularization technique:
-    x_train_base_feature = prepare_x_categorical_variables (x_train, base)
-    w0, w = linear_regression_model_reg (x_train_base_feature, y_train, args.r)
-    x_val_base = prepare_x_categorical_variables (x_val, base)
-    y_pred_val = w0 + x_val_base.dot(w)   
-    print ('rmse y_pred_val_categorical_variables : ', rmse(y_val, y_pred_val))
+    for r in [0.0, 0.00001, 0.0001, 0.001, 0.1, 1, 10]:
+        x_train_base_feature = prepare_x_categorical_variables (x_train, base)
+        w0, w = linear_regression_model_reg (x_train_base_feature, y_train, r)
+        x_val_base = prepare_x_categorical_variables (x_val, base)
+        y_pred_val = w0 + x_val_base.dot(w)   
+        print (f'rmse y_pred_val_categorical_var_reg_{r} : ', rmse(y_val, y_pred_val))
+    
+    # Using the model
+
+    x_full_train = pd.concat([x_train, x_val])
+    x_full_train = x_full_train.reset_index(drop=True)
+
+    y_full_train = np.concatenate([y_train, y_val])
+
+    r = 0.001
+    x_train_base_feature = prepare_x_categorical_variables (x_full_train, base)
+    w0, w = linear_regression_model_reg (x_train_base_feature, y_full_train, r)
+    x_test = prepare_x_categorical_variables (x_test, base)
+    y_pred_test = w0 + x_test.dot(w)   
+    print (f'rmse y_pred_test_categorical_var_reg_{r} : ', rmse(y_test, y_pred_test))
     
 
 if __name__ == '__main__':
