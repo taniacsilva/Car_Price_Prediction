@@ -8,48 +8,48 @@ I have followed the following steps:
 
 * 👀 Prepare data and Exploratory Data Analysis (EDA)
 
-  **Main Conclusions** : The target variable distribution was transformed to a normal one, because before I had a long-tail distribution that usually can become an issue to ML models.
+        **Main Conclusions** : The target variable distribution was transformed to a normal one, because before I had a long-tail distribution that usually can become an issue to ML models.
 
 
 * 🐱‍👤 Setting up the validation framework (split between train, validation and test)
 
-   **Main Conclusions** : For each partition, feature matrices (X) and y vectors of targets were obtained. I have calculated the size of partitions and records are shuffled to guarantee that values of the three partitions contain non-sequential records of the dataset, and the partitions are created with the shuffled indices.
+        **Main Conclusions** : For each partition, feature matrices (X) and y vectors of targets were obtained. I have calculated the size of partitions and records are shuffled to guarantee that values of the three partitions contain non-sequential records of the dataset, and the partitions are created with the shuffled indices.
 
 
 * 👩‍💻 Use linear regression for predicting price
 
-   **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation. The feature matrix does not have an inverse because it is not square, so it is required to obtain an approximate solution, which can be obtained using the Gram matrix. The vector of weights or coefficients obtained with this formula is the closest possible solution to the LR system.
-   Some of the features in x_train are NaN. So, I set them to 0, to the model be solvable. Please notice that other non-zero values can be used as filler (e.g. mean or I could use KNN algorithm).
+        **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation. The feature matrix does not have an inverse because it is not square, so it is required to obtain an approximate solution, which can be obtained using the Gram matrix. The vector of weights or coefficients obtained with this formula is the closest possible solution to the LR system.
+        Some of the features in x_train are NaN. So, I set them to 0, to the model be solvable. Please notice that other non-zero values can be used as filler (e.g. mean or I could use KNN algorithm).
 
-   Normal Equation :  $w=(X^TX)^{-1}X^Ty$
+        Normal Equation :  $w=(X^TX)^{-1}X^Ty$
 
-    Where, $X^TX$ is the Gram Matrix
+        Where, $X^TX$ is the Gram Matrix
 
 * ✔ Evaluating the model with RMSE
 
-    **Main Conclusions** : I have taken some visual comparisons by plotting predicted y and the actual y using an histogram. I have also used RMSE in order to quantify how good or bad the model is. RMSE measures the error associated with the model being evaluated and enables to compare models.
+        **Main Conclusions** : I have taken some visual comparisons by plotting predicted y and the actual y using an histogram. I have also used RMSE in order to quantify how good or bad the model is. RMSE measures the error associated with the model being evaluated and enables to compare models.
 
-    $RMSE=\sqrt{\frac{1}{m}\sum(g(x_{i})-y_{i})^2}$
+        $RMSE=\sqrt{\frac{1}{m}\sum(g(x_{i})-y_{i})^2}$
     
-    Where, $g(x_{i})$ is the prediction, $y_{i}$ is the actual and $m$ is the number of cars in the dataset
+        Where, $g(x_{i})$ is the prediction, $y_{i}$ is the actual and $m$ is the number of cars in the dataset
 
 * 🏋️‍♀️ Feature engineering  
 
-   **Main Conclusions** : Creation of features from existing ones, namely creation of the feature age of car. This feature improved significantly the performance of my model (measured by RMSE and by making some visual comparisons).
+        **Main Conclusions** : Creation of features from existing ones, namely creation of the feature age of car. This feature improved significantly the performance of my model (measured by RMSE and by making some visual comparisons).
 
 
 * 👨‍🚀 Integration of categorical variables in the model
 
-   **Main Conclusions** : These variables need to be converted to a numerical form because ML models can interpret only numerical features. I have incorporate the top 5 most common categories from all features. This transformation from categorical to numerical variables is known as One-Hot encoding.
+        **Main Conclusions** : These variables need to be converted to a numerical form because ML models can interpret only numerical features. I have incorporate the top 5 most common categories from all features. This transformation from categorical to numerical variables is known as One-Hot encoding.
 
 
 * 📏 Regularization
 
-   **Main Conclusions** : Adding a small number to the diagonal of the matrix (XTX) increased the performance of my model
+        **Main Conclusions** : Adding a small number to the diagonal of the matrix (XTX) increased the performance of my model
 
 
 * 🎆 Using the model 
 
-   **Main Conclusions** : After finding the best model and parameters, it was trained with training and validation partitions (x_full_train) and the final RMSE was calculated on the test partition.
+        **Main Conclusions** : After finding the best model and parameters, it was trained with training and validation partitions (x_full_train) and the final RMSE was calculated on the test partition.
 
 
