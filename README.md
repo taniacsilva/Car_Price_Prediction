@@ -19,19 +19,19 @@ I have followed the following steps:
 * 👩‍💻 Use linear regression for predicting price
 
     **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation. The feature matrix does not have an inverse because it is not square, so it is required to obtain an approximate solution, which can be obtained using the Gram matrix. The vector of weights or coefficients obtained with this formula is the closest possible solution to the LR system.
-       Some of the features in x_train are NaN. So, I set them to 0, to the model be solvable. Please notice that other non-zero values can be used as filler (e.g. mean or I could use KNN algorithm).
+    Some of the features in x_train are NaN. So, I set them to 0, to the model be solvable. Please notice that other non-zero values can be used as filler (e.g. mean or I could use KNN algorithm).
 
-       Normal Equation :  $w=(X^TX)^{-1}X^Ty$
+    Normal Equation :  $w=(X^TX)^{-1}X^Ty$
 
-        Where, $X^TX$ is the Gram Matrix
+    Where, $X^TX$ is the Gram Matrix
 
 * ✔ Evaluating the model with RMSE
 
     **Main Conclusions** : I have taken some visual comparisons by plotting predicted y and the actual y using an histogram. I have also used RMSE in order to quantify how good or bad the model is. RMSE measures the error associated with the model being evaluated and enables to compare models.
 
-       $RMSE=\sqrt{\frac{1}{m}\sum(g(x_{i})-y_{i})^2}$
+    $RMSE=\sqrt{\frac{1}{m}\sum(g(x_{i})-y_{i})^2}$
     
-       Where, $g(x_{i})$ is the prediction, $y_{i}$ is the actual and $m$ is the number of cars in the dataset
+    Where, $g(x_{i})$ is the prediction, $y_{i}$ is the actual and $m$ is the number of cars in the dataset
 
 * 🏋️‍♀️ Feature engineering  
 
