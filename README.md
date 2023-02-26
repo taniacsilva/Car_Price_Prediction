@@ -1,4 +1,4 @@
-# Car_Price_Prediction
+# Car Price Prediction
 
 This project is inspired in a ML Zoomcamp.
 
@@ -20,7 +20,8 @@ I have followed the following steps:
 
    **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation
 
-   Normal Equation : w = $$((X^T*X)^-1*X^Ty)$$
+   Normal Equation : w = $X^T$
+   *X)^(-1)*X^Ty)$
 
 
 * ✔ Evaluating the model with RMSE
