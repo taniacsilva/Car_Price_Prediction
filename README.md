@@ -26,9 +26,10 @@ I have followed the following steps:
     Where, $X^TX$ is the Gram Matrix
 
 * ✔ Evaluating the model with RMSE
+
     **Main Conclusions** : I have taken some visual comparisons by plotting predicted y and the actual y using an histogram. I have also used RMSE in order to quantify how good or bad the model is. RMSE measures the error associated with the model being evaluated and enables to compare models.
 
-    $RMSE=\sqrt{frac{1}/{m}}$
+    $RMSE=\sqrt{\frac{1}/{m}\sum(g(x_{i})-y_{i})^2}$
 
 * 🏋️‍♀️ Feature engineering  
 
