@@ -20,8 +20,8 @@ I have followed the following steps:
 
    **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation
 
-   Normal Equation : w = $X^T*X$
-   *X)^(-1)*X^Ty)$
+   Normal Equation : w = $(X^T*X)^(-1)$
+   *(-1)*X^Ty)$
 
 
 * ✔ Evaluating the model with RMSE
