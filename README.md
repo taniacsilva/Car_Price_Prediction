@@ -2,7 +2,7 @@
 
 This project is inspired in a ML Zoomcamp.
 
-In project I created a model to predict the price of a car. The dataset used was obtained from [kaggle](https://www.kaggle.com/CooperUnion/cardataset)
+In this project I created a model to predict the price of a car. The dataset used was obtained from [kaggle](https://www.kaggle.com/CooperUnion/cardataset)
 
 I have followed the following steps:
 
@@ -20,7 +20,7 @@ I have followed the following steps:
 
    **Main Conclusions** : Obtaining predictions as close as possible to target values requires the calculation of weights from the general LR equation
 
-   Normal Equation : $w = (X^T*X)^-1*X^T*y $
+   Normal Equation : w = $((X^T*X)^-1*X^Ty)$
 
 
 * Evaluating the model with RMSE
