@@ -29,16 +29,18 @@ I have followed the following steps:
 
     **Main Conclusions** : I have taken some visual comparisons by plotting predicted y and the actual y using an histogram. I have also used RMSE in order to quantify how good or bad the model is. RMSE measures the error associated with the model being evaluated and enables to compare models.
 
-    $RMSE=\sqrt{\frac{1}/{m}\sum(g(x_{i})-y_{i})^2}$
+    $RMSE=\sqrt{\frac{1}{m}\sum(g(x_{i})-y_{i})^2}$
+    
+    Where, $g(x_{i})$ is the prediction, $y_{i}$ is the actual and $m$ is the number of cars in the dataset
 
 * 🏋️‍♀️ Feature engineering  
 
-   **Main Conclusions** : Creation of features from existing ones, namely creation of the feature age of car. This feature improved significantly the performance of my model.
+   **Main Conclusions** : Creation of features from existing ones, namely creation of the feature age of car. This feature improved significantly the performance of my model (measured by RMSE and by making some visual comparisons).
 
 
 * 👨‍🚀 Integration of categorical variables in the model
 
-   **Main Conclusions** : One-hot encoding was used
+   **Main Conclusions** : These variables need to be converted to a numerical form because ML models can interpret only numerical features. I have incorporate the top 5 most common categories from all features. This transformation from categorical to numerical variables is known as One-Hot encoding.
 
 
 * 📏 Regularization
@@ -48,6 +50,6 @@ I have followed the following steps:
 
 * 🎆 Using the model 
 
-   **Main Conclusions** : 
+   **Main Conclusions** : After finding the best model and parameters, it was trained with training and validation partitions (x_full_train) and the final RMSE was calculated on the test partition.
 
 
