@@ -306,7 +306,8 @@ def linear_regression_model_reg (x_train, y_train, r):
             Args: 
                 x_train (pandas.DataFrame): Dataframe that includes the explanatory variables for the train set
                 y_train (numpy array): Array that includes the objective variable for the train set
-            
+                r (float): Regularization parameter, that will be used in the diagonal
+                
             Return:
                 w0 (float): constant obtained by training the linear regression model
                 w (numpy array): array that contains the linear regression coefficients
@@ -329,6 +330,8 @@ def parse_arguments():
 
         Args:
             file_name: name of the command line field to insert on the runtime
+            test_s: name of the command line field to insert on the runtime
+            val_s: name of the command line field to insert on the runtime
 
         Return:
             args: Stores the extracted data from the parser run
@@ -338,7 +341,6 @@ def parse_arguments():
     parser.add_argument("file_name", help="The csv file name")
     parser.add_argument("test_s", help="The size of the test set, in percentage",type=float)
     parser.add_argument("val_s", help="The size of the validation set, in percentage",type=float)
-    #parser.add_argument("r", help="parameter used for regularization", type=float)
     args = parser.parse_args()
 
     return args
@@ -376,7 +378,6 @@ def main():
 
     
     # Considering the 'age' as a feature
-    
     x_train_base_feature = prepare_x_feature_age(x_train, base)
     w0, w = linear_regression_model (x_train_base_feature, y_train)
     x_val_base = prepare_x_feature_age(x_val, base)
@@ -385,7 +386,6 @@ def main():
     plt = results_comparison_plot  (y_pred_val, y_val)
 
     # Considering the 'num_doors' as a feature (categorical)
-
     x_train_base_feature = prepare_x_doors (x_train, base)
     w0, w = linear_regression_model (x_train_base_feature, y_train)
     x_val_base = prepare_x_doors(x_val, base)
@@ -415,7 +415,6 @@ def main():
         print (f'rmse y_pred_val_categorical_var_reg_{r} : ', rmse(y_val, y_pred_val))
     
     # Using the model
-
     x_full_train = pd.concat([x_train, x_val])
     x_full_train = x_full_train.reset_index(drop=True)
 
