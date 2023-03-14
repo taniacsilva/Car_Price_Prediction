@@ -6,14 +6,14 @@ In this project I created a model to predict the price of a car. The dataset use
 
 I have followed the following steps:
 
- 👀 **Prepare data and Exploratory Data Analysis (EDA)**
+* 👀 Prepare data and Exploratory Data Analysis (EDA)
 
-    *Main Conclusions* : The target variable distribution was transformed to a normal one, because before I had a long-tail distribution that usually can become an issue to ML models.
+    **Main Conclusions** : The target variable distribution was transformed to a normal one, because before I had a long-tail distribution that usually can become an issue to ML models.
 
 
  🐱‍👤 **Setting up the validation framework (split between train, validation and test)**
 
-    *Main Conclusions* : For each partition, feature matrices (X) and y vectors of targets were obtained. I have calculated the size of partitions and records are shuffled to guarantee that values of the three partitions contain non-sequential records of the dataset, and the partitions are created with the shuffled indices.
+*Main Conclusions* : For each partition, feature matrices (X) and y vectors of targets were obtained. I have calculated the size of partitions and records are shuffled to guarantee that values of the three partitions contain non-sequential records of the dataset, and the partitions are created with the shuffled indices.
 
 
  👩‍💻 **Use linear regression for predicting price**
